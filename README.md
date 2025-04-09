@@ -1,10 +1,10 @@
 # [Finals-Lab-Task-1](https://github.com/user-attachments/files/19664008/LAB.TASK.1.docx) - MySQL Basics
 This project demonstrates the creation of a basic relational database in MySQL. It includes the setup of five related tables:
-- employees: Stores employee details with self-referencing manager IDs.
-- departments: Contains department names.
-- employee_departments: Many-to-many relationship between employees and departments.
-- employee_projects: Tracks which projects each employee is working on.
-- managers: Stores manager records linked to employees.
+- **employees:** Stores employee details with self-referencing manager IDs.
+- **departments:** Contains department names.
+- **employee_departments:** Many-to-many relationship between employees and departments.
+- **employee_projects:** Tracks which projects each employee is working on.
+- **managers:** Stores manager records linked to employees.
 
 The schema includes primary keys, foreign keys, and relationships between tables to ensure referential integrity.
 
@@ -23,8 +23,6 @@ The schema includes primary keys, foreign keys, and relationships between tables
 - department_id: Integer, foreign key referencing department id in departments.
 - Composite primary key (employee id, department id). 
 
-
-
 **4. Create a table named employee_projects with the following fields:**
 - employee_id: Integer, foreign key referencing employee_id in employees.
 - project_name: String (VARCHAR) with up to 255 characters, not null.
@@ -42,28 +40,28 @@ The schema includes primary keys, foreign keys, and relationships between tables
 ![Image](https://github.com/user-attachments/assets/4c18cd4d-d45d-4ca7-9350-ab84d06bf5da)
 
 - **TASK 2: QUERY STATEMENT**
-![image](https://github.com/user-attachments/assets/7c570fc5-664a-40c5-8783-9802a74b05d1)
+![image](https://github.com/user-attachments/assets/ef966274-c4ec-4e08-aa50-db517d28a0ff)
 
 - **TABLE STRUCTURE**
-![image](https://github.com/user-attachments/assets/ece77b87-6809-4141-ab85-fee609600818)
+![image](https://github.com/user-attachments/assets/bd369d7d-087f-4f80-90ce-f1107400616f)
 
 - **TASK 3: QUERY STATEMENT**
-![image](https://github.com/user-attachments/assets/37093170-9f38-4c8c-886e-3617301c5aca)
+![image](https://github.com/user-attachments/assets/92a4d073-21c0-41e7-9c44-9038962cfd0a)
 
 - **TABLE STRUCTURE**
-![image](https://github.com/user-attachments/assets/04bcae53-1237-4f4d-b9ad-74a283b1e428)
+![image](https://github.com/user-attachments/assets/fa44f4a7-1b9b-437c-aa5d-c744ac24b8cc)
 
 - **TASK 4: QUERY STATEMENT**
-![image](https://github.com/user-attachments/assets/ae14b061-596d-4b06-a262-96b386892d59)
+![image](https://github.com/user-attachments/assets/28ac6a81-7d1a-44bc-aade-230f2a03960d)
 
 - **TABLE STRUCTURE**
-![image](https://github.com/user-attachments/assets/56349cd4-8332-4f74-8fa5-69a59f3dd89c)
+![image](https://github.com/user-attachments/assets/b2998884-7497-4f91-b55d-f935ccb5d526)
 
 - **TASK 5: QUERY STATEMENT**
-![image](https://github.com/user-attachments/assets/d27b9578-2eb4-48ec-811f-2fda4d32af7f)
+![image](https://github.com/user-attachments/assets/7b6c84bc-9033-4380-99a9-851e4d1af226)
 
 - **TABLE STRUCTURE**
-![image](https://github.com/user-attachments/assets/81238acc-1e77-4025-83ff-bf367cc6ad4e)
+![image](https://github.com/user-attachments/assets/93138753-48e1-46a2-ae44-c7908e84c6fd)
 
 - **ERD**
-![image](https://github.com/user-attachments/assets/e1e6ad7b-5f04-40f7-95c7-052566abbfac)
+![image](https://github.com/user-attachments/assets/2603a987-b5d4-49e9-941e-bdc33f14c0f7)
