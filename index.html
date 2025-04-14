@@ -1,0 +1,626 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Finals Lab Task 1 - MySQL Basics</title>
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --space-dark: #0a0b1a;
+            --space-light: #2d3252;
+            --star-color: #ffffff;
+            --accent-purple: #9d4edd;
+            --accent-blue: #48bfe3;
+            --text-color: #e2e2e2;
+            --link-color: #a991ff;
+            --code-bg: rgba(45, 50, 82, 0.5);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Space Grotesk', sans-serif;
+            background: var(--space-dark);
+            color: var(--text-color);
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        .cosmic-background {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: -1;
+            background: radial-gradient(circle at center, #1a1b4b 0%, #0a0b1a 100%);
+            opacity: 0.8;
+            animation: pulse-bg 15s ease infinite;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem;
+            position: relative;
+        }
+
+        .header {
+            text-align: center;
+            padding: 4rem 0;
+            position: relative;
+        }
+
+        .title {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+            background: linear-gradient(45deg, var(--accent-purple), var(--accent-blue));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            animation: glow 3s ease-in-out infinite;
+        }
+
+        .content-section {
+            background: rgba(45, 50, 82, 0.3);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 2rem;
+            margin: 2rem 0;
+            border: 1px solid rgba(157, 78, 221, 0.2);
+            transform: translateY(50px);
+            opacity: 0;
+            animation: fadeInUp 1s ease forwards;
+        }
+
+        .project-description {
+            line-height: 1.8;
+            margin-bottom: 2rem;
+            font-size: 1.1rem;
+        }
+
+        .step-section {
+            margin: 2rem 0;
+        }
+
+        .step-title {
+            color: var(--accent-purple);
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+        }
+
+        .step-title::before {
+            content: '';
+            width: 4px;
+            height: 24px;
+            background: var(--accent-purple);
+            margin-right: 1rem;
+            border-radius: 2px;
+        }
+
+        .code-block {
+            background: var(--code-bg);
+            padding: 1.5rem;
+            border-radius: 10px;
+            border-left: 4px solid var(--accent-purple);
+            font-family: 'Consolas', monospace;
+            margin: 1rem 0;
+            overflow-x: auto;
+            color: #e2e2e2;
+        }
+
+        .table-info {
+            background: rgba(45, 50, 82, 0.3);
+            padding: 1.5rem;
+            border-radius: 10px;
+            margin: 1rem 0;
+            border: 1px solid rgba(157, 78, 221, 0.2);
+        }
+
+        .table-info h4 {
+            color: var(--accent-purple);
+            margin-bottom: 1rem;
+        }
+
+        .table-info ul {
+            list-style: none;
+            padding-left: 1.5rem;
+        }
+
+        .table-info li {
+            margin-bottom: 0.5rem;
+            position: relative;
+        }
+
+        .table-info li::before {
+            content: '★';
+            color: var(--accent-blue);
+            position: absolute;
+            left: -1.5rem;
+            font-weight: bold;
+            font-size: 0.8rem;
+        }
+
+        .image-container {
+            position: relative;
+            margin: 2rem 0;
+            border-radius: 15px;
+            overflow: hidden;
+            transform: translateY(30px);
+            opacity: 0;
+            animation: fadeInUp 1s ease forwards 0.3s;
+            cursor: pointer;
+            background: rgba(45, 50, 82, 0.3);
+            padding: 1rem;
+            border: 1px solid rgba(157, 78, 221, 0.2);
+        }
+
+        .image-container img {
+            width: 100%;
+            height: auto;
+            border-radius: 10px;
+            transition: transform 0.5s ease;
+        }
+
+        .image-container:hover img {
+            transform: scale(1.02);
+        }
+
+        .image-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(45deg, rgba(157, 78, 221, 0.2), rgba(72, 191, 227, 0.2));
+            pointer-events: none;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .image-container:hover .image-overlay {
+            opacity: 1;
+        }
+
+        .stars {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: -1;
+        }
+
+        .star {
+            position: absolute;
+            background: var(--star-color);
+            border-radius: 50%;
+            animation: twinkle var(--duration) infinite;
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(10, 11, 26, 0.95);
+            z-index: 1000;
+            backdrop-filter: blur(10px);
+        }
+
+        .modal.active {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            animation: modalFadeIn 0.3s ease;
+        }
+
+        .modal-content {
+            position: relative;
+            max-width: 90%;
+            max-height: 90vh;
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 0 30px rgba(157, 78, 221, 0.3);
+        }
+
+        .modal-content img {
+            width: 100%;
+            height: auto;
+            border-radius: 15px;
+        }
+
+        .modal-close {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: rgba(45, 50, 82, 0.8);
+            border: 2px solid var(--accent-purple);
+            color: var(--text-color);
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 20px;
+            transition: all 0.3s ease;
+        }
+
+        .modal-close:hover {
+            background: var(--accent-purple);
+            transform: rotate(90deg);
+        }
+
+        .download-section {
+            text-align: center;
+            margin: 3rem 0;
+            padding: 2rem;
+            background: rgba(45, 50, 82, 0.3);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            border: 1px solid rgba(157, 78, 221, 0.2);
+        }
+
+        .download-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 15px;
+            padding: 15px 30px;
+            background: rgba(45, 50, 82, 0.8);
+            border: 2px solid var(--accent-purple);
+            color: var(--text-color);
+            border-radius: 30px;
+            text-decoration: none;
+            font-size: 18px;
+            transition: all 0.3s ease;
+        }
+
+        .download-btn:hover {
+            background: var(--accent-purple);
+            transform: translateY(-3px);
+            box-shadow: 0 5px 20px rgba(157, 78, 221, 0.4);
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes modalFadeIn {
+            from {
+                opacity: 0;
+                transform: scale(0.95);
+            }
+            to {
+                opacity: 1;
+                transform: scale(1);
+            }
+        }
+
+        @keyframes pulse-bg {
+            0%, 100% { opacity: 0.8; }
+            50% { opacity: 0.6; }
+        }
+
+        .content-section ul {
+            list-style: none;
+            padding-left: 1.5rem;
+        }
+
+        .content-section ul li {
+            position: relative;
+            margin-bottom: 0.8rem;
+        }
+
+        .content-section ul li::before {
+            content: '★';
+            color: var(--accent-blue);
+            position: absolute;
+            left: -1.5rem;
+            font-weight: bold;
+            font-size: 0.8rem;
+        }
+    </style>
+</head>
+<body>
+    <div class="cosmic-background"></div>
+    <div class="stars"></div>
+
+    <div class="container">
+        <header class="header">
+            <h1 class="title">Finals Lab Task 1</h1>
+            <p class="subtitle">MySQL Database Creation and Management</p>
+        </header>
+
+        <section class="content-section">
+            <h2>Project Overview</h2>
+            <p class="project-description">
+                This project demonstrates the creation of a basic relational database in MySQL. It includes the setup of five related tables with proper relationships, primary keys, and foreign keys to ensure referential integrity. The database is designed to manage employee information, departments, projects, and management structure.
+            </p>
+        </section>
+
+        <section class="content-section">
+            <h2>Project Details</h2>
+            <div class="step-section">
+                <h3 class="step-title">Database Tables</h3>
+                <ul>
+                    <li><strong>employees:</strong> Stores employee details with self-referencing manager IDs.</li>
+                    <li><strong>departments:</strong> Contains department names.</li>
+                    <li><strong>employee_departments:</strong> Many-to-many relationship between employees and departments.</li>
+                    <li><strong>employee_projects:</strong> Tracks which projects each employee is working on.</li>
+                    <li><strong>managers:</strong> Stores manager records linked to employees.</li>
+                </ul>
+            </div>
+
+            <div class="step-section">
+                <h3 class="step-title">Step by Step Process</h3>
+                
+                <div class="table-info">
+                    <h4>1. Create employees table</h4>
+                    <ul>
+                        <li>employee id: Unique integer, auto-increment, primary key</li>
+                        <li>employee_name: String (VARCHAR) with up to 255 characters, not null</li>
+                        <li>manager_id: Integer, foreign key referencing employee_id in the same table (employees)</li>
+                    </ul>
+                </div>
+
+                <div class="table-info">
+                    <h4>2. Create departments table</h4>
+                    <ul>
+                        <li>department_id: Unique integer, auto-increment, primary key</li>
+                        <li>department name: String (VARCHAR) with up to 255 characters, not null</li>
+                    </ul>
+                </div>
+
+                <div class="table-info">
+                    <h4>3. Create employee_departments table</h4>
+                    <ul>
+                        <li>employee_id: Integer, foreign key referencing employee_id in employees</li>
+                        <li>department_id: Integer, foreign key referencing department id in departments</li>
+                        <li>Composite primary key (employee id, department id)</li>
+                    </ul>
+                </div>
+
+                <div class="table-info">
+                    <h4>4. Create employee_projects table</h4>
+                    <ul>
+                        <li>employee_id: Integer, foreign key referencing employee_id in employees</li>
+                        <li>project_name: String (VARCHAR) with up to 255 characters, not null</li>
+                    </ul>
+                </div>
+
+                <div class="table-info">
+                    <h4>5. Create managers table</h4>
+                    <ul>
+                        <li>manager_id: Unique integer, auto-increment, primary key</li>
+                        <li>employee_id: Integer, foreign key referencing employee_id in employees</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+        <section class="content-section">
+            <h2>Database Schema</h2>
+            <div class="step-section">
+                <div class="table-info">
+                    <h4>employees</h4>
+                    <ul>
+                        <li>employee_id (Primary Key, Auto-increment)</li>
+                        <li>employee_name (VARCHAR(255), Not Null)</li>
+                        <li>manager_id (Foreign Key → employees.employee_id)</li>
+                    </ul>
+                </div>
+
+                <div class="table-info">
+                    <h4>departments</h4>
+                    <ul>
+                        <li>department_id (Primary Key, Auto-increment)</li>
+                        <li>department_name (VARCHAR(255), Not Null)</li>
+                    </ul>
+                </div>
+
+                <div class="table-info">
+                    <h4>employee_departments</h4>
+                    <ul>
+                        <li>employee_id (Foreign Key → employees.employee_id)</li>
+                        <li>department_id (Foreign Key → departments.department_id)</li>
+                        <li>Composite Primary Key (employee_id, department_id)</li>
+                    </ul>
+                </div>
+
+                <div class="table-info">
+                    <h4>employee_projects</h4>
+                    <ul>
+                        <li>employee_id (Foreign Key → employees.employee_id)</li>
+                        <li>project_name (VARCHAR(255), Not Null)</li>
+                    </ul>
+                </div>
+
+                <div class="table-info">
+                    <h4>managers</h4>
+                    <ul>
+                        <li>manager_id (Primary Key, Auto-increment)</li>
+                        <li>employee_id (Foreign Key → employees.employee_id)</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+        <section class="content-section">
+            <h2>Implementation Results</h2>
+            
+            <div class="step-section">
+                <h3>Task 1: Employees Table</h3>
+                <div class="image-container" data-fullscreen>
+                    <img src="https://github.com/user-attachments/assets/58bfff54-c1b8-444d-ba4f-7c7e4a634558" alt="Task 1 Query Statement">
+                    <div class="image-overlay"></div>
+                </div>
+                <div class="image-container" data-fullscreen>
+                    <img src="https://github.com/user-attachments/assets/4c18cd4d-d45d-4ca7-9350-ab84d06bf5da" alt="Task 1 Table Structure">
+                    <div class="image-overlay"></div>
+                </div>
+            </div>
+
+            <div class="step-section">
+                <h3>Task 2: Departments Table</h3>
+                <div class="image-container" data-fullscreen>
+                    <img src="https://github.com/user-attachments/assets/ef966274-c4ec-4e08-aa50-db517d28a0ff" alt="Task 2 Query Statement">
+                    <div class="image-overlay"></div>
+                </div>
+                <div class="image-container" data-fullscreen>
+                    <img src="https://github.com/user-attachments/assets/bd369d7d-087f-4f80-90ce-f1107400616f" alt="Task 2 Table Structure">
+                    <div class="image-overlay"></div>
+                </div>
+            </div>
+
+            <div class="step-section">
+                <h3>Task 3: Employee Departments Table</h3>
+                <div class="image-container" data-fullscreen>
+                    <img src="https://github.com/user-attachments/assets/92a4d073-21c0-41e7-9c44-9038962cfd0a" alt="Task 3 Query Statement">
+                    <div class="image-overlay"></div>
+                </div>
+                <div class="image-container" data-fullscreen>
+                    <img src="https://github.com/user-attachments/assets/fa44f4a7-1b9b-437c-aa5d-c744ac24b8cc" alt="Task 3 Table Structure">
+                    <div class="image-overlay"></div>
+                </div>
+            </div>
+
+            <div class="step-section">
+                <h3>Task 4: Employee Projects Table</h3>
+                <div class="image-container" data-fullscreen>
+                    <img src="https://github.com/user-attachments/assets/28ac6a81-7d1a-44bc-aade-230f2a03960d" alt="Task 4 Query Statement">
+                    <div class="image-overlay"></div>
+                </div>
+                <div class="image-container" data-fullscreen>
+                    <img src="https://github.com/user-attachments/assets/b2998884-7497-4f91-b55d-f935ccb5d526" alt="Task 4 Table Structure">
+                    <div class="image-overlay"></div>
+                </div>
+            </div>
+
+            <div class="step-section">
+                <h3>Task 5: Managers Table</h3>
+                <div class="image-container" data-fullscreen>
+                    <img src="https://github.com/user-attachments/assets/7b6c84bc-9033-4380-99a9-851e4d1af226" alt="Task 5 Query Statement">
+                    <div class="image-overlay"></div>
+                </div>
+                <div class="image-container" data-fullscreen>
+                    <img src="https://github.com/user-attachments/assets/93138753-48e1-46a2-ae44-c7908e84c6fd" alt="Task 5 Table Structure">
+                    <div class="image-overlay"></div>
+                </div>
+            </div>
+
+            <div class="step-section">
+                <h3>Entity Relationship Diagram (ERD)</h3>
+                <div class="image-container" data-fullscreen>
+                    <img src="https://github.com/user-attachments/assets/2603a987-b5d4-49e9-941e-bdc33f14c0f7" alt="Entity Relationship Diagram">
+                    <div class="image-overlay"></div>
+                </div>
+            </div>
+        </section>
+
+        <section class="download-section">
+            <h2>Download Project File</h2>
+            <a href="https://github.com/user-attachments/files/19664008/LAB.TASK.1.docx" class="download-btn" download>
+                <i class="fas fa-file-word"></i>
+                <span class="text">Download Documentation</span>
+            </a>
+        </section>
+    </div>
+
+    <!-- Modal for fullscreen images -->
+    <div class="modal">
+        <div class="modal-content">
+            <img src="" alt="">
+            <button class="modal-close">×</button>
+        </div>
+    </div>
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+
+    <script>
+        // Create stars
+        function createStars() {
+            const starsContainer = document.querySelector('.stars');
+            const numberOfStars = 200;
+
+            for (let i = 0; i < numberOfStars; i++) {
+                const star = document.createElement('div');
+                star.className = 'star';
+                star.style.width = `${Math.random() * 3}px`;
+                star.style.height = star.style.width;
+                star.style.left = `${Math.random() * 100}%`;
+                star.style.top = `${Math.random() * 100}%`;
+                star.style.setProperty('--duration', `${Math.random() * 3 + 1}s`);
+                starsContainer.appendChild(star);
+            }
+        }
+
+        // Initialize
+        window.addEventListener('load', () => {
+            createStars();
+        });
+
+        // Fullscreen Image Modal
+        const modal = document.querySelector('.modal');
+        const modalImg = modal.querySelector('img');
+        const closeBtn = modal.querySelector('.modal-close');
+        const images = document.querySelectorAll('.image-container[data-fullscreen]');
+
+        images.forEach(container => {
+            container.addEventListener('click', (e) => {
+                const img = container.querySelector('img');
+                modalImg.src = img.src;
+                modal.classList.add('active');
+                document.body.style.overflow = 'hidden';
+            });
+        });
+
+        closeBtn.addEventListener('click', () => {
+            modal.classList.remove('active');
+            document.body.style.overflow = '';
+        });
+
+        modal.addEventListener('click', (e) => {
+            if (e.target === modal) {
+                modal.classList.remove('active');
+                document.body.style.overflow = '';
+            }
+        });
+
+        // Intersection Observer for animations
+        const observer = new IntersectionObserver(
+            (entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.style.opacity = '1';
+                        entry.target.style.transform = 'translateY(0)';
+                    }
+                });
+            },
+            { threshold: 0.1 }
+        );
+
+        document.querySelectorAll('.content-section, .image-container').forEach(el => {
+            observer.observe(el);
+        });
+    </script>
+</body>
+</html> 
