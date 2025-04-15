@@ -723,6 +723,78 @@
             transform: translateY(-5px) scale(1.02);
             box-shadow: 0 10px 30px rgba(157, 78, 221, 0.3);
         }
+
+        .step-section {
+            margin: 2rem 0;
+            background: rgba(45, 50, 82, 0.3);
+            padding: 1.5rem;
+            border-radius: 10px;
+            border-left: 4px solid var(--accent-purple);
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .step-section:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 5px 15px rgba(157, 78, 221, 0.3);
+            border-left-color: var(--accent-blue);
+        }
+
+        .step-section::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: linear-gradient(
+                45deg,
+                transparent,
+                rgba(157, 78, 221, 0.1),
+                rgba(72, 191, 227, 0.1),
+                transparent
+            );
+            transform: rotate(45deg);
+            animation: sectionShine 3s linear infinite;
+            pointer-events: none;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .step-section:hover::before {
+            opacity: 1;
+        }
+
+        @keyframes sectionShine {
+            0% {
+                transform: rotate(45deg) translateX(-100%);
+            }
+            100% {
+                transform: rotate(45deg) translateX(100%);
+            }
+        }
+
+        .step-section h3 {
+            color: var(--accent-blue);
+            margin-bottom: 1.5rem;
+            font-size: 1.3rem;
+            transition: all 0.3s ease;
+        }
+
+        .step-section:hover h3 {
+            transform: translateX(10px);
+            color: var(--accent-purple);
+            text-shadow: 0 0 8px rgba(157, 78, 221, 0.5);
+        }
+
+        .step-section .image-container:first-of-type {
+            margin-top: 1rem;
+        }
+
+        .step-section .image-container:last-of-type {
+            margin-bottom: 0;
+        }
     </style>
 </head>
 <body>
